@@ -1,4 +1,9 @@
 { config, lib, pkgs, ... }: {
   home.stateVersion = "22.11";
-  programs.home-manager.enable = true;
+
+  imports = [
+    ./shells/nushell/nushell.nix
+    ./status-bars/waybar/waybar.nix
+  ];
+
 }

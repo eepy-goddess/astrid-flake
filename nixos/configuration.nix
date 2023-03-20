@@ -97,16 +97,7 @@ in
     remotePlay.openFirewall = true;
     dedicatedServer.openFirewall = true;
   };
-  nixpkgs.overlays = [
-    (self: super: {
-      waybar = super.waybar.overrideAttrs (oldAttrs: {
-        mesonFlags = oldAttrs.mesonFlags ++ [ "-Dexperimental=true" ];
-        patchPhase = ''
-          sed -i 's/zext_workspace_handle_v1_activate(workspace_handle_);/const std::string command = "hyprctl dispatch workspace " + name_;\n\tsystem(command.c_str());/g' src/modules/wlr/workspace_manager.cpp
-        '';
-      });
-    })
-  ];
+
   virtualisation.docker.rootless.enable = true;
   nixpkgs.config.packageOverrides = pkgs: {
     steam = pkgs.steam.override {
@@ -142,7 +133,6 @@ in
   services.picom.enable = true;
   hardware.bluetooth.enable = true;
   programs.dconf.enable = true;
-  programs.waybar.enable = true;
   services.printing = {
     enable = true;
     drivers = with pkgs; [
@@ -185,7 +175,6 @@ in
     wl-clipboard
     grim
     slurp
-    waybar
     hyprpaper
     virt-manager
     armcord
