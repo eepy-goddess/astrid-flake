@@ -5,6 +5,7 @@
     ./shells/nushell/nushell.nix
     ./status-bars/waybar/waybar.nix
     ./shells/bash/bash.nix
+    ./terminals/kitty/kitty.nix
   ];
 
 }

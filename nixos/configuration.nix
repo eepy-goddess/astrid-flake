@@ -65,13 +65,8 @@ in
     extraGroups = [ "networkmanager" "wheel" "vboxusers" "libvirtd" ];
     shell = pkgs.nushell;
     packages = with pkgs; [
-      kitty
       discord-canary
-      rofi
-      feh
       librewolf
-      sxhkd
-      polybar
       wine
       rustup
       youtube-dl
