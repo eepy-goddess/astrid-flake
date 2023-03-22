@@ -5,22 +5,35 @@
     home-manager.url = "github:nix-community/home-manager";
   };
 
-  outputs = { nixpkgs, home-manager, hyprland, ... }: {
-    nixosConfigurations.nyaaxOwOs = nixpkgs.lib.nixosSystem {
-      # ...
-      system = "x86_64-linux";
-      modules = [
-        home-manager.nixosModules.default
-        {
-          home-manager.useUserPackages = true;
-          home-manager.useGlobalPkgs = true;
-          home-manager.extraSpecialArgs = {
-            inherit hyprland;
-          };
-          home-manager.users.astrid = import ./home-manager/home.nix;
-        }
-        ./nixos/configuration.nix
-      ];
+  outputs = { nixpkgs, home-manager, hyprland, ... }:
+    let
+      pkgs = nixpkgs.legacyPackages."x86_64-linux";
+    in
+    {
+      nixosConfigurations.nyaaxOwOs = nixpkgs.lib.nixosSystem {
+        # ...
+        system = "x86_64-linux";
+        modules = [
+          home-manager.nixosModules.default
+          {
+            home-manager.useUserPackages = true;
+            home-manager.useGlobalPkgs = true;
+            home-manager.extraSpecialArgs = {
+              inherit hyprland;
+            };
+            home-manager.users.astrid = import ./home-manager/home.nix;
+          }
+          ./nixos/configuration.nix
+        ];
+      };
+
+      homeConfigurations.astrid = home-manager.lib.homeManagerConfiguration {
+        inherit pkgs;
+        inherit hyprland;
+
+        modules = [
+          ./home-manager/home.nix
+        ];
+      };
     };
-  };
 }
