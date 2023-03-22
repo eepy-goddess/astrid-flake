@@ -93,7 +93,6 @@ in
     dedicatedServer.openFirewall = true;
   };
 
-  virtualisation.docker.rootless.enable = true;
   nixpkgs.config.packageOverrides = pkgs: {
     steam = pkgs.steam.override {
       extraPkgs = pkgs: with pkgs; [
@@ -184,10 +183,6 @@ in
         "wheel"
       ];
     }];
-  };
-  virtualisation.virtualbox.host = {
-    enable = true;
-    enableExtensionPack = true;
   };
 
   virtualisation.libvirtd = {
