@@ -1,8 +1,8 @@
 { pkgs, libs, config, ... }:
 let
-  username = home.username;
+  username = "astrid";
 in
 {
-  home.username = "astrid";
+  home.username = username;
   home.homeDirectory = "/home/${username}";
 }
