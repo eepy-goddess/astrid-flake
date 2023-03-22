@@ -29,8 +29,10 @@
 
       homeConfigurations.astrid = home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
-        inherit hyprland;
 
+        extraSpecialArgs = {
+          inherit hyprland;
+        };
         modules = [
           ./home-manager/home.nix
         ];
