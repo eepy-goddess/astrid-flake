@@ -34,6 +34,7 @@
           inherit hyprland;
         };
         modules = [
+          ./home-manager/non-nixos.nix
           ./home-manager/home.nix
         ];
       };
