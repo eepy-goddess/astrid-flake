@@ -1,4 +1,8 @@
-{ pkgs, libs, config, ... }: {
+{ pkgs, libs, config, ... }:
+let
+  username = home.username;
+in
+{
   home.username = "astrid";
-  home.homeDirectory = "/home/${home.username}";
+  home.homeDirectory = "/home/${username}";
 }
