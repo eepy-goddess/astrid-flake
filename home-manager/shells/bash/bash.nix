@@ -1,12 +1,12 @@
-{ config, lib, pkgs, ... }: {
+{ config, lib, pkgs, ... }:
+let
+  configText = builtins.readFile ./config/.bashrc;
+in
+{
   programs.bash = {
     enable = true;
     bashrcExtra = ''
-      # Environment variables
-      export PATH="$PATH:/home/astrid/.cargo/bin"
-
-      # Aliases
-      alias la='ls -a'
+      ${configText}
     '';
   };
 }
