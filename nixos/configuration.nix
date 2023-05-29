@@ -148,6 +148,7 @@ in
     xmrig
     wayland
     wlroots
+    swayfx
     libsForQt5.breeze-gtk
     libsForQt5.breeze-icons
     grapejuice

@@ -4,7 +4,6 @@
     ./shells/shells.nix
     ./status-bars/status-bars.nix
     ./terminals/terminals.nix
-    ./window-managers/window-managers.nix
   ];
 
 }

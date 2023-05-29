@@ -6,6 +6,7 @@
 
 window#waybar {
 	color: #edecee;
+	margin-bottom: 10px;
 	background: transparent;
 }
 
@@ -71,7 +72,7 @@ window#waybar {
 	color: #15141b;
 	background: #6d6d6d;
 }
-#workspaces button.active {
+#workspaces button.focused {
 	color: #15141b;
 	background: #a277ff;	
   padding-right: 20px;
