@@ -1,5 +1,8 @@
 # Environment variables
-export PATH="$PATH:/home/astrid/.cargo/bin"
+export SXHKD_SHELL="bash"
 
 # Aliases
 alias la='ls -a'
+
+# Shell jobs
+(cat ~/.cache/wal/sequences &)

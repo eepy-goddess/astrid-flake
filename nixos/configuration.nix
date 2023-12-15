@@ -3,24 +3,6 @@
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
 { config, pkgs, lib, ... }:
-let
-  configure-gtk = pkgs.writeTextFile {
-    name = "configure-gtk";
-    destination = "/bin/configure-gtk";
-    executable = true;
-    text =
-      let
-        schema = pkgs.gsettings-desktop-schemas;
-        datadir = "${schema}/share/gsettings-schemas/${schema.name}";
-      in
-      ''
-        export XDG_DATA_DIRS=${datadir}:$XDG_DATA_DIRS
-        gnome_schema=org.gnome.desktop.interface
-        gsettings set $gnome_schema gtk-theme 'Breeze-Dark'
-        gsettings set $gnome_schema cursor-theme 'breeze_cursors'
-      '';
-  };
-in
 {
   imports =
     [
@@ -31,9 +13,9 @@ in
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  boot.loader.efi.efiSysMountPoint = "/boot/efi";
-  boot.kernelParams = [ "module_blacklist=i915" "nvidia-drm.modeset=1" ];
-  boot.kernelPackages = pkgs.linuxKernel.packages.linux_6_3;
+  boot.loader.efi.efiSysMountPoint = "/boot";
+  boot.kernelParams = [ "module_blacklist=i915" ];
+  boot.kernelPackages = pkgs.linuxKernel.packages.linux_6_6;
 
   networking.hostName = "nyaaxOwOs"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -62,27 +44,14 @@ in
     isNormalUser = true;
     description = "astrid";
     extraGroups = [ "networkmanager" "wheel" "vboxusers" "libvirtd" ];
-    shell = pkgs.nushell;
+    shell = pkgs.bash;
     packages = with pkgs; [
-      discord-canary
-      librewolf
       wine
-      rustup
-      youtube-dl
-      xsel
-      xclip
-      flameshot
-      openjdk17
-      jetbrains.clion
       prismlauncher
-      rust-analyzer
-      libnotify
-      dunst
-      graphite-gtk-theme
       firefox
-      distrobox
       vscode
-      rnix-lsp
+      sxhkd
+      libsForQt5.breeze-gtk
     ];
   };
   # steam crap
@@ -107,16 +76,11 @@ in
     enable = true;
     videoDrivers = [ "nvidia" ];
     libinput.enable = true;
-    displayManager.sx.enable = true;
-  };
-  xdg.portal = {
-    enable = true;
-    wlr.enable = true;
+    displayManager.startx.enable = true;
+    windowManager.bspwm.enable = true;
   };
   programs.fish.enable = true;
   programs.gnupg.agent.enable = true;
-  services.gnome.core-os-services.enable = true;
-  programs.xwayland.enable = true;
   sound.enable = true;
   hardware.pulseaudio.enable = false;
   services.pipewire = {
@@ -138,55 +102,17 @@ in
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     noto-fonts-cjk-sans
-    libopus
-    libsodium
-    ffmpeg
-    file
     git
-    gcc
     lxappearance
-    xmrig
-    wayland
-    wlroots
-    swayfx
-    libsForQt5.breeze-gtk
-    libsForQt5.breeze-icons
-    grapejuice
     cups
-    libreoffice
-    binutils
-    elogind
     neofetch
     neovim
-    python3
     wget
-    libstdcxx5
-    python39Packages.pip
-    wofi
-    xcb-util-cursor
-    gnome.adwaita-icon-theme
-    glib
-    libseat
-    configure-gtk
     wl-clipboard
-    grim
-    slurp
-    hyprpaper
-    virt-manager
     armcord
-    evince
+    flameshot
   ];
   services.blueman.enable = true;
-  security.doas = {
-    enable = true;
-    extraRules = [{
-      persist = true;
-      keepEnv = true;
-      groups = [
-        "wheel"
-      ];
-    }];
-  };
 
   virtualisation.libvirtd = {
     enable = true;

@@ -1,5 +1,5 @@
 {config, lib, pkgs, ...}: {
   imports = [
-	./polybar/polybar.nix
+    ./rofi/rofi.nix
   ];
 }
