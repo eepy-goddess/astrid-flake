@@ -8,3 +8,6 @@ alias ll='ls -l'
 
 # Shell jobs
 (cat ~/.cache/wal/sequences &)
+
+# Direnv
+eval "$(direnv hook bash)"

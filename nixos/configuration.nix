@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, magmawm, ... }:
 {
   imports =
     [
@@ -17,11 +17,15 @@
     efi.canTouchEfiVariables = true;
     efi.efiSysMountPoint = "/boot";
   };
-  boot.kernelParams = [ "module_blacklist=i915" ];
+  boot.kernelParams = [ "module_blacklist=i915,iwlwifi" ];
   boot.kernelPackages = pkgs.linuxKernel.packages.linux_6_6;
-
+  boot.extraModulePackages = with pkgs; [
+    linuxKernel.packages.linux_6_6.rtl88x2bu
+  ];
+  hardware.firmware = with pkgs; [
+    sof-firmware
+  ];
   networking.hostName = "nyaaxOwOs"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
@@ -37,6 +41,12 @@
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.utf8";
 
+  # Enable XDG
+  xdg.portal = {
+    enable = true;
+    extraPortals = [pkgs.xdg-desktop-portal-gtk];
+  };
+
   # Configure keymap in X11
   services.xserver = {
     layout = "us";
@@ -49,34 +59,18 @@
     extraGroups = [ "networkmanager" "wheel" "vboxusers" "libvirtd" ];
     shell = pkgs.bash;
     packages = with pkgs; [
-      wine
-      prismlauncher
-      firefox
-      vscode
-      sxhkd
-      libsForQt5.breeze-gtk
     ];
   };
+  services.flatpak.enable = true;
   # steam crap
-  programs.steam = {
-    enable = true;
-    remotePlay.openFirewall = true;
-    dedicatedServer.openFirewall = true;
-  };
-
-  nixpkgs.config.packageOverrides = pkgs: {
-    steam = pkgs.steam.override {
-      extraPkgs = pkgs: with pkgs; [
-        libgdiplus
-      ];
-    };
-  };
+  programs.steam.enable = true;
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
   hardware.nvidia.modesetting.enable = true;
   services.xserver = {
     enable = true;
+    autorun = true;
     videoDrivers = [ "nvidia" ];
     libinput.enable = true;
     displayManager.startx.enable = true;
@@ -84,11 +78,11 @@
   };
   programs.fish.enable = true;
   programs.gnupg.agent.enable = true;
-  sound.enable = true;
   hardware.pulseaudio.enable = false;
   services.pipewire = {
     enable = true;
     pulse.enable = true;
+    alsa.enable = true;
   };
   hardware.opengl.enable = true;
   hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.stable;
@@ -104,21 +98,14 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    noto-fonts-cjk-sans
-    git
-    lxappearance
-    cups
-    neofetch
-    neovim
-    wget
-    wl-clipboard
-    armcord
-    flameshot
   ];
   services.blueman.enable = true;
 
-  virtualisation.libvirtd = {
-    enable = true;
+  virtualisation = {
+    libvirtd.enable = true;
+    virtualbox.host = {
+      enable = true;
+    };
   };
 
 
