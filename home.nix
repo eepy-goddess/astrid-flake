@@ -1,10 +1,11 @@
 { config, lib, pkgs, ... }: {
   home.stateVersion = "22.11";
   imports = [
-    ./shells/shells.nix
-    ./status-bars/status-bars.nix
-    ./terminals/terminals.nix
-    ./app-launchers/app-launchers.nix
+    ./home-manager/shells/shells.nix
+    ./home-manager/status-bars/status-bars.nix
+    ./home-manager/terminals/terminals.nix
+    ./home-manager/app-launchers/app-launchers.nix
+    ./home-manager/window-managers/window-managers.nix
   ];
 
   home.packages = with pkgs; [
@@ -12,7 +13,6 @@
     prismlauncher
     firefox
     vscode
-    sxhkd
     libsForQt5.breeze-gtk
     hyfetch
     lutris
@@ -36,4 +36,5 @@
 
   programs.pywal.enable = true;
   programs.direnv.enable = true;
+  nixpkgs.config.allowUnfree = true;
 }

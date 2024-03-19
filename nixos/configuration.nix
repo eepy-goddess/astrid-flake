@@ -47,9 +47,14 @@
     extraPortals = [pkgs.xdg-desktop-portal-gtk];
   };
 
-  # Configure keymap in X11
+  # X11 config
   services.xserver = {
-    layout = "us";
+    enable = true;
+    xkb.layout = "us";
+    autorun = true;
+    videoDrivers = [ "nvidia" ];
+    libinput.enable = true;
+    displayManager.startx.enable = true;
   };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
@@ -69,12 +74,7 @@
 
   hardware.nvidia.modesetting.enable = true;
   services.xserver = {
-    enable = true;
-    autorun = true;
-    videoDrivers = [ "nvidia" ];
-    libinput.enable = true;
-    displayManager.startx.enable = true;
-    windowManager.bspwm.enable = true;
+    
   };
   programs.fish.enable = true;
   programs.gnupg.agent.enable = true;
@@ -121,6 +121,6 @@
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "unstable"; # Did you read the comment?
+  system.stateVersion = "23.11"; # Did you read the comment?
 
 }

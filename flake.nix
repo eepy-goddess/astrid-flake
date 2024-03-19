@@ -27,13 +27,16 @@
             programs.honkers-railway-launcher.enable = true;
             programs.honkers-launcher.enable = true;
 	  }
-          home-manager.nixosModules.default
+	  # I wanna separate system config from home config
+          /* 
+	  home-manager.nixosModules.default
           {
 	    
 	    home-manager.useUserPackages = true;
             home-manager.useGlobalPkgs = true;
-            home-manager.users.astrid = import ./home-manager/home.nix;
+            home-manager.users.astrid = import ./home.nix;
           }
+	  */
           ./nixos/configuration.nix
         ];
       };
@@ -41,8 +44,7 @@
         inherit pkgs;
 
         modules = [
-          ./home-manager/non-nixos.nix
-          ./home-manager/home.nix
+          ./home.nix
         ];
       };
     };
