@@ -1,51 +1,49 @@
 {
+
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    home-manager = { 
+    home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    anime-launcher = { 
-      url = "github:ezKEa/aagl-gtk-on-nix";
+
+    lix = {
+      url =
+        "git+https://git@git.lix.systems/lix-project/lix?ref=refs/tags/2.90-beta.1";
+      flake = false;
+    };
+
+    lix-module = {
+      url = "git+https://git.lix.systems/lix-project/nixos-module";
+      inputs.lix.follows = "lix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    nix-colors.url = "github:Misterio77/nix-colors";
+    river-bsp-layout.url = "/home/astrid/projects/river-bsp-layout";
   };
 
-  outputs = { nixpkgs, home-manager, anime-launcher, ... }:
+  outputs =
+    { nixpkgs, home-manager, nix-colors, river-bsp-layout, lix-module, ... }:
     let
-      pkgs = nixpkgs.legacyPackages."x86_64-linux";
-    in
-    {
+      system = "x86_64-linux";
+      pkgs = import nixpkgs rec {
+        inherit system;
+        overlays = [ river-bsp-layout.overlays."${system}".default ];
+      };
+    in {
+      formatter."${system}" = pkgs.nixfmt-classic;
       nixosConfigurations.nyaaxOwOs = nixpkgs.lib.nixosSystem {
         # ...
-        system = "x86_64-linux";
-        modules = [
-	  anime-launcher.nixosModules.default 
-          {
-	    programs.anime-game-launcher.enable = true; # Adds launcher and /etc/hosts rules
-            programs.anime-borb-launcher.enable = true;
-            programs.honkers-railway-launcher.enable = true;
-            programs.honkers-launcher.enable = true;
-	  }
-	  # I wanna separate system config from home config
-          /* 
-	  home-manager.nixosModules.default
-          {
-	    
-	    home-manager.useUserPackages = true;
-            home-manager.useGlobalPkgs = true;
-            home-manager.users.astrid = import ./home.nix;
-          }
-	  */
-          ./nixos/configuration.nix
-        ];
+        inherit system;
+        modules = [ lix-module.nixosModules.default ./nixos/configuration.nix ];
       };
       homeConfigurations.astrid = home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
 
-        modules = [
-          ./home.nix
-        ];
+        modules = [ ./home.nix ];
+
+        extraSpecialArgs = { inherit nix-colors; };
       };
     };
 }

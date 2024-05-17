@@ -1,6 +1,7 @@
 # Environment variables
 export SXHKD_SHELL="bash"
 export GPG_TTY=$(tty)
+export WLR_NO_HARDWARE_CURSORS=1
 
 # Aliases
 alias la='ls -a'

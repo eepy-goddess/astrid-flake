@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+wal -R &
+dbus-launch bspwm -C /home/astrid/.config/bspwm/bspwmrc

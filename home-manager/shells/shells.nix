@@ -1,5 +1,1 @@
-{ config, libs, pkgs, ... }: {
-  imports = [
-    ./bash/bash.nix
-  ];
-}
+{ config, libs, pkgs, ... }: { imports = [ ./bash/bash.nix ]; }

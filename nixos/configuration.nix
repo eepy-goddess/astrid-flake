@@ -2,13 +2,11 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, lib, magmawm, ... }:
-{
-  imports =
-    [
-      # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-    ];
+{ config, pkgs, lib, ... }: {
+  imports = [
+    # Include the results of the hardware scan.
+    ./hardware-configuration.nix
+  ];
 
   # Bootloader.
   boot.loader = {
@@ -19,12 +17,9 @@
   };
   boot.kernelParams = [ "module_blacklist=i915,iwlwifi" ];
   boot.kernelPackages = pkgs.linuxKernel.packages.linux_6_6;
-  boot.extraModulePackages = with pkgs; [
-    linuxKernel.packages.linux_6_6.rtl88x2bu
-  ];
-  hardware.firmware = with pkgs; [
-    sof-firmware
-  ];
+  boot.extraModulePackages = with pkgs;
+    [ linuxKernel.packages.linux_6_6.rtl88x2bu ];
+
   networking.hostName = "nyaaxOwOs"; # Define your hostname.
 
   # Configure network proxy if necessary
@@ -33,8 +28,17 @@
 
   # Enable networking
   networking.networkmanager.enable = true;
-  # Enable flakes
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  # Enable flakesYQt
+  nix = {
+    settings = {
+      experimental-features = [ "nix-command" "flakes" ];
+
+      extra-substituters = [ "https://cache.lix.systems" ];
+
+      trusted-public-keys =
+        [ "cache.lix.systems:aBnZUw8zA7H35Cz2RyKFVs3H4PlGTLawyY5KRbvJR8o=" ];
+    };
+  };
   # Set your time zone.
   time.timeZone = "America/Denver";
 
@@ -44,13 +48,16 @@
   # Enable XDG
   xdg.portal = {
     enable = true;
-    extraPortals = [pkgs.xdg-desktop-portal-gtk];
+    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
   };
 
   # X11 config
   services.xserver = {
     enable = true;
-    xkb.layout = "us";
+    xkb = {
+      layout = "us";
+      variant = "intl";
+    };
     autorun = true;
     videoDrivers = [ "nvidia" ];
     libinput.enable = true;
@@ -61,53 +68,41 @@
   users.users.astrid = {
     isNormalUser = true;
     description = "astrid";
-    extraGroups = [ "networkmanager" "wheel" "vboxusers" "libvirtd" ];
+    extraGroups = [ "networkmanager" "wheel" "libvirtd" ];
     shell = pkgs.bash;
-    packages = with pkgs; [
-    ];
+    packages = with pkgs; [ ];
   };
   services.flatpak.enable = true;
-  # steam crap
+
   programs.steam.enable = true;
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
+  hardware = {
+    firmware = with pkgs; [ sof-firmware ];
 
-  hardware.nvidia.modesetting.enable = true;
-  services.xserver = {
-    
+    bluetooth.enable = true;
+    nvidia = {
+      modesetting.enable = true;
+      package = config.boot.kernelPackages.nvidiaPackages.stable;
+    };
+    opengl.enable = true;
   };
   programs.fish.enable = true;
   programs.gnupg.agent.enable = true;
-  hardware.pulseaudio.enable = false;
   services.pipewire = {
     enable = true;
     pulse.enable = true;
     alsa.enable = true;
   };
-  hardware.opengl.enable = true;
-  hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.stable;
   services.picom.enable = true;
-  hardware.bluetooth.enable = true;
   programs.dconf.enable = true;
   services.printing = {
     enable = true;
-    drivers = with pkgs; [
-      canon-cups-ufr2
-    ];
+    drivers = with pkgs; [ canon-cups-ufr2 ];
   };
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
-  environment.systemPackages = with pkgs; [
-  ];
   services.blueman.enable = true;
 
-  virtualisation = {
-    libvirtd.enable = true;
-    virtualbox.host = {
-      enable = true;
-    };
-  };
-
+  virtualisation = { libvirtd.enable = true; };
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];

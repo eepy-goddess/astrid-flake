@@ -1,5 +1,1 @@
-{config, lib, pkgs, ...}: {
-  programs.rofi = {
-    enable = true;
-  };
-}
+{ config, lib, pkgs, ... }: { programs.rofi = { enable = true; }; }

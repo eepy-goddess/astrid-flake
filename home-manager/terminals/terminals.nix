@@ -1,5 +1,1 @@
-{ config, libs, pkgs, ... }: {
-  imports = [
-    ./kitty/kitty.nix
-  ];
-}
+{ config, libs, pkgs, ... }: { imports = [ ./kitty/kitty.nix ]; }

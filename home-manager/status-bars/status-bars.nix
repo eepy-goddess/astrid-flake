@@ -1,5 +1,1 @@
-{config, lib, pkgs, ...}: {
-  imports = [
-	./polybar/polybar.nix
-  ];
-}
+{ config, lib, pkgs, ... }: { imports = [ ./polybar/polybar.nix ]; }
