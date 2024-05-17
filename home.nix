@@ -57,6 +57,18 @@ in {
     variant = "dark";
   };
 
+  astridConfig = {
+    terminals = {
+      kitty.enable = true;
+    };
+    windowManagers = { 
+      river = {
+        enable = true;
+	modKey = "Alt";
+      };
+    };
+  };
+
   services.flameshot.enable = true;
   programs = {
     pywal.enable = true;

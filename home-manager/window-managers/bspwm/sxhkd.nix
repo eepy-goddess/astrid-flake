@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }: {
+{ config, lib, pkgs, ... }: lib.mkIf config.astridConfig.windowManagers.bspwm.enable {
   services.sxhkd = {
     enable = true;
     keybindings = {
